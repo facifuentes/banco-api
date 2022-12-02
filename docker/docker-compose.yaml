@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  apibanco:
+    container_name:   apibanco
+    env_file: .env
+    build:
+      context: .
+    command: java -jar api-0.0.1-SNAPSHOT.jar ${ENV_PROFILE_PROPERTIES}
+    ports:
+      - 8083:8083
+    depends_on:
+      - dbpostgresql
+  dbpostgresql:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=BANCO
