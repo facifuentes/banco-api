@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +75,10 @@ public class MovimientoService implements IMovimientoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Movimiento> findAll() {
-        return movimientoRepository.findAll();
+    public List<Movimiento> findByClienteAndFechas(@NotNull @NotBlank String identificacion, @NotNull @NotBlank LocalDateTime fechaInicial, @NotNull @NotBlank LocalDateTime fechaFinal) {
+        return movimientoRepository.findAllByClientAndFechas(identificacion,fechaInicial,fechaFinal);
     }
+
+
+
 }

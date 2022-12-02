@@ -2,9 +2,7 @@ package com.banco.api.service.impl;
 
 import com.banco.api.exception.NotFoundException;
 import com.banco.api.model.Cliente;
-import com.banco.api.model.Persona;
 import com.banco.api.repository.ClienteRepository;
-import com.banco.api.repository.PersonaRepository;
 import com.banco.api.service.interfaces.IClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +19,6 @@ import java.util.List;
 public class ClienteService implements IClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final PersonaRepository personaRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)

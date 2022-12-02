@@ -1,0 +1,26 @@
+{
+  "code": 200,
+  "message": "Exitoso",
+  "value": [
+    {
+      "mvtFecha": "2022-12-01T09:30:59.338017",
+      "cliente": "Fernando",
+      "cuentaNumero": 11111,
+      "mvtValorMovimiento": -1000,
+      "mvtSaldo": 1000,
+      "saldoInicial": 2000,
+      "cntEstado": false,
+      "mvtTipoCuenta": "AHORROS"
+    },
+    {
+      "mvtFecha": "2022-12-02T09:48:06.927437",
+      "cliente": "Fernando",
+      "cuentaNumero": 22222,
+      "mvtValorMovimiento": -100,
+      "mvtSaldo": 4900,
+      "saldoInicial": 5000,
+      "cntEstado": false,
+      "mvtTipoCuenta": "CORRIENTE"
+    }
+  ]
+}

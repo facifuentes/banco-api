@@ -17,7 +17,7 @@ public class MovimientoDto {
 
     private Long mvtId;
 
-    @NotNull(message = "Tipo de movimiento obligatorio")
+    @NotNull(message = "Tipo de movimiento obligatorio RETIRO/DEPOSITO")
     private Enum.EnumTipoMovimiento mvtTipo;
 
     @NotNull(message = "Valor obligatorio")
