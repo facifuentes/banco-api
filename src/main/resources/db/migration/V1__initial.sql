@@ -1,26 +1,18 @@
-CREATE TABLE sc_banco.persona (
-     per_id SERIAL NOT NULL,
-     per_nombre varchar(255) NOT NULL,
-     genero varchar(255) ,
-     edad int ,
-     identificacion varchar(20) NOT NULL,
-     direccion varchar(255) NOT NULL,
-     telefono varchar(20) NOT NULL,
-     PRIMARY KEY (per_id)
-);
-
-ALTER TABLE sc_banco.persona ADD CONSTRAINT uk_identificacion UNIQUE (identificacion);
-
 CREATE TABLE sc_banco.cliente (
-     cli_id SERIAL NOT NULL,
-     cli_clave varchar(255) NOT NULL,
-     cli_estado boolean NOT NULL,
-     cli_persona int NOT NULL,
-     PRIMARY KEY (cli_id)
+    cli_id SERIAL NOT NULL,
+    cli_clave varchar(255) NOT NULL,
+    cli_estado boolean NOT NULL,
+    nombre varchar(255) NOT NULL,
+    genero varchar(255) ,
+    edad int ,
+    identificacion varchar(20) NOT NULL,
+    direccion varchar(255) NOT NULL,
+    telefono varchar(20) NOT NULL,
+    PRIMARY KEY (cli_id)
 );
 
-ALTER TABLE ONLY sc_banco.cliente
-    ADD CONSTRAINT fk_cliente_persona FOREIGN KEY (cli_persona) REFERENCES sc_banco.persona(per_id) ON DELETE RESTRICT;
+ALTER TABLE sc_banco.cliente ADD CONSTRAINT uk_identificacion UNIQUE (identificacion);
+
 
 CREATE TABLE sc_banco.cuenta (
       cnt_id SERIAL NOT NULL,

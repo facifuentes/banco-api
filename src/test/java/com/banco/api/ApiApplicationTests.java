@@ -4,7 +4,6 @@ import com.banco.api.controller.ClienteController;
 import com.banco.api.controller.CuentaController;
 import com.banco.api.dto.ClienteDto;
 import com.banco.api.dto.CuentaDto;
-import com.banco.api.model.Cliente;
 import com.banco.api.model.Enum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

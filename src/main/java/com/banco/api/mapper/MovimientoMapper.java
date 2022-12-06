@@ -35,7 +35,7 @@ public interface MovimientoMapper {
     @Mapping(source = "mvtCuenta.cntNumero", target = "cuentaNumero")
     @Mapping(source = "mvtCuenta.cntSaldoInicial", target = "saldoInicial")
     @Mapping(source = "mvtCuenta.cntTipo", target = "mvtTipoCuenta")
-    @Mapping(source = "mvtCuenta.cntCliente.cliPersona.perNombre", target = "cliente")
+    @Mapping(source = "mvtCuenta.cntCliente.nombre", target = "cliente")
     @Mapping(source = "mvtValor", target = "mvtValorMovimiento")
     MovimientoReporteDto movimientoToMovimientoReporteDto (Movimiento movimiento);
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class ClienteService implements IClienteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Cliente save(@NotNull Cliente cliente) {
+    public Cliente save(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
@@ -34,14 +33,14 @@ public class ClienteService implements IClienteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void delete(@NotNull  long idCliente) {
+    public void delete(long idCliente) {
         clienteRepository.deleteById(idCliente);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Cliente findById(@NotNull long idCliente)  {
-        return clienteRepository.findById(idCliente).orElseThrow(()->new NotFoundException("Cliente no encontrado"));
+    public Cliente findById(long idCliente)  {
+        return clienteRepository.findClienteByCliId(idCliente).orElseThrow(()->new NotFoundException("Cliente no encontrado"));
     }
 
     @Override

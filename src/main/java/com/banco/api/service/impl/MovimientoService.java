@@ -6,8 +6,8 @@ import com.banco.api.exception.NotFoundException;
 import com.banco.api.model.Cuenta;
 import com.banco.api.model.Enum;
 import com.banco.api.model.Movimiento;
+import com.banco.api.repository.CuentaRepository;
 import com.banco.api.repository.MovimientoRepository;
-import com.banco.api.service.interfaces.ICuentaService;
 import com.banco.api.service.interfaces.IMovimientoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,34 +25,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovimientoService implements IMovimientoService {
     private final MovimientoRepository movimientoRepository;
-    private final ICuentaService cuentaService;
+    private final CuentaRepository cuentaRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Movimiento save(Movimiento movimiento) {
-        boolean isRetiro=movimiento.getMvtTipo().equals(Enum.EnumTipoMovimiento.RETIRO.toString());
-
         long numeroCuenta=movimiento.getMvtCuenta().getCntNumero();
 
-        Cuenta cuenta = cuentaService.findByNumeroCuenta(numeroCuenta);
+        Cuenta cuenta = cuentaRepository.findCuentaByCntNumero(numeroCuenta).orElseThrow(()->new NotFoundException("Cuenta no encontrada"));
+        long saldo = getSaldoCuenta(numeroCuenta, cuenta.getCntSaldoInicial());
 
-        long saldo = cuenta.getCntSaldoInicial();
-
-        Optional<Movimiento> ultimoMovimiento=movimientoRepository.findFirstByMvtCuenta_CntNumeroOrderByMvtFechaDesc(numeroCuenta);
-
-        if(ultimoMovimiento.isPresent()){
-            saldo = ultimoMovimiento.get().getMvtSaldo();
-        }
-
-        long valorMovimiento=movimiento.getMvtValor();
-
-        if(isRetiro){
-            valorMovimiento = -movimiento.getMvtValor();
-        }
-
+        long valorMovimiento =getValorMovimiento(movimiento.getMvtTipo(), movimiento.getMvtValor());
         saldo +=valorMovimiento;
 
-        if(isRetiro && saldo<=0){
+        if(saldo<=0){
             throw new ForbiddenException("Saldo no disponible");
         }
 
@@ -66,6 +50,24 @@ public class MovimientoService implements IMovimientoService {
         return movimientoRepository.save(movimiento);
     }
 
+    private long getValorMovimiento(String tipoMovimiento, long valor){
+        if(tipoMovimiento.equals(Enum.EnumTipoMovimiento.RETIRO.toString())){
+            valor *= -1;
+        }
+        return valor;
+    }
+
+    private long getSaldoCuenta(long numeroCuenta, long saldoActual){
+
+        Optional<Movimiento> ultimoMovimiento=movimientoRepository.findFirstByMvtCuenta_CntNumeroOrderByMvtFechaDesc(numeroCuenta);
+
+        if(ultimoMovimiento.isPresent()){
+            saldoActual = ultimoMovimiento.get().getMvtSaldo();
+        }
+
+        return saldoActual;
+    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -75,7 +77,7 @@ public class MovimientoService implements IMovimientoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Movimiento> findByClienteAndFechas(@NotNull @NotBlank String identificacion, @NotNull @NotBlank LocalDateTime fechaInicial, @NotNull @NotBlank LocalDateTime fechaFinal) {
+    public List<Movimiento> findByClienteAndFechas(String identificacion, LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
         return movimientoRepository.findAllByClientAndFechas(identificacion,fechaInicial,fechaFinal);
     }
 

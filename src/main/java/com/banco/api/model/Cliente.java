@@ -1,25 +1,25 @@
 package com.banco.api.model;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Accessors(chain = true)
+@Getter
+@Setter
+@Accessors(chain = true)//This means we can chain multiple set operations together in one statement
 @Table(name = "cliente")
-public class Cliente  implements Serializable {
+public class Cliente  extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,11 +33,5 @@ public class Cliente  implements Serializable {
 
     @Column(name = "cli_estado", nullable = false)
     private Boolean cliEstado;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cli_persona")
-    @JsonManagedReference
-    @NotNull(message = "La persona es obligatoria")
-    private Persona cliPersona;
 
 }

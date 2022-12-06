@@ -2,7 +2,6 @@ package com.banco.api.service.interfaces;
 
 import com.banco.api.model.Cliente;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface IClienteService {
@@ -11,9 +10,9 @@ public interface IClienteService {
 
     Cliente update(Cliente cliente);
 
-    void delete(@NotNull long idCliente);
+    void delete(long idCliente);
 
-    Cliente findById(@NotNull long idCliente) throws Exception;
+    Cliente findById(long idCliente);
 
     List<Cliente> findAll();
 }

@@ -16,9 +16,9 @@ public interface CuentaMapper {
     Cuenta cuentaDtoToCuenta(CuentaDto cuentaDto);
 
     @Mapping(source = "cntCliente.cliId", target = "idClient")
-    CuentaDto cuentaToCuentaDto(Cuenta cuentaDto);
+    CuentaDto cuentaToCuentaDto(Cuenta cuenta);
 
-    List<CuentaDto> litsCuentaToCuentaDto(List<Cuenta> listCuentaDto);
+    List<CuentaDto> litsCuentaToCuentaDto(List<Cuenta> listCuenta);
 
     @BeforeMapping
     default void beforeCuentaToCuentaDto(CuentaDto cuentaDto, @MappingTarget Cuenta cuenta) {

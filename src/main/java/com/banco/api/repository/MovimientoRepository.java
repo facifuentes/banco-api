@@ -14,7 +14,7 @@ public interface MovimientoRepository extends JpaRepository<Movimiento, Long>, J
     Optional<Movimiento> findFirstByMvtCuenta_CntNumeroOrderByMvtFechaDesc(long numeroCuenta);
 
     @Query(value = "SELECT mvt FROM Movimiento  mvt " +
-            "WHERE mvt.mvtCuenta.cntCliente.cliPersona.identificacion = ?1 and " +
+            "WHERE mvt.mvtCuenta.cntCliente.identificacion = ?1 and " +
             " (mvt.mvtFecha>=?2 and mvt.mvtFecha<=?3) order by mvt.mvtFecha asc")
     List<Movimiento> findAllByClientAndFechas(String identificacion, LocalDateTime fechaInicial, LocalDateTime fechaFinal);
 }

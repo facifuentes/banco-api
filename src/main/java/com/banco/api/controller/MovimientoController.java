@@ -10,7 +10,6 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,13 +18,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Api(tags = "movimiento")
-@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/movimiento")
 public class MovimientoController {
-
-
     private final IMovimientoService movimientoService;
     private final MovimientoMapper movimientoMapper;
 

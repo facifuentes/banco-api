@@ -8,10 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,19 +19,17 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NotFoundException.class, FileNotFoundException.class})
-    @ResponseBody
     public ObjectResponse notFoundRequest(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage(), request.getRequestURI());
     }
 
     @ResponseStatus(HttpStatus.INSUFFICIENT_STORAGE)
     @ExceptionHandler({FileStorageException.class, FileUploadException.class})
-    @ResponseBody
     public ObjectResponse fileStorageRequest(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.INSUFFICIENT_STORAGE.value(), exception.getMessage(), request.getRequestURI());
     }
@@ -49,7 +46,6 @@ public class ApiExceptionHandler {
             javax.validation.ConstraintViolationException.class,  InvalidDataAccessApiUsageException.class,
             NullPointerException.class
     })
-    @ResponseBody
     public ObjectResponse badRequest(HttpServletRequest request, Exception exception) {
         String message = getMessage(exception);
         return new ObjectResponse(HttpStatus.BAD_REQUEST.value(), message, request.getRequestURI());
@@ -57,7 +53,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BadRequestException.class})
-    @ResponseBody
     public ObjectResponse badRequestCustom(HttpServletRequest request, RuntimeExceptionCustom exception) {
         String message = getMessage(exception);
         return new ObjectResponse(HttpStatus.BAD_REQUEST.value(), message, exception.getValue());
@@ -107,7 +102,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({ConflictException.class,  DataIntegrityViolationException.class})
-    @ResponseBody
     public ObjectResponse conflictRequest(HttpServletRequest request, Exception exception) {
         String message = exception.getMessage();
 
@@ -133,7 +127,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class, ServletException.class})
-    @ResponseBody
     public ObjectResponse fatalErrorUnexpectedException(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage(), request.getRequestURI());
     }
@@ -141,7 +134,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.CREATED)
     @ExceptionHandler({ObjectRequestException.class})
-    @ResponseBody
     public ObjectResponse objectRequest(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.CREATED.value(), exception.getMessage(), request.getRequestURI());
     }
@@ -149,7 +141,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler({org.springframework.web.HttpRequestMethodNotSupportedException.class})
-    @ResponseBody
     public ObjectResponse methodNotAllowed(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.METHOD_NOT_ALLOWED.value(), exception.getMessage(), request.getRequestURI());
     }
@@ -157,7 +148,6 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({ForbiddenException.class})
-    @ResponseBody
     public ObjectResponse forbiddenRequest(HttpServletRequest request, Exception exception) {
         return new ObjectResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage(), request.getRequestURI());
     }

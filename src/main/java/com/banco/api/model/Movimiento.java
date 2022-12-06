@@ -2,10 +2,7 @@ package com.banco.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -17,7 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
 @Table(name = "movimiento")
 public class Movimiento  implements Serializable {
@@ -26,7 +24,6 @@ public class Movimiento  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mvt_id", updatable = false)
     private Long mvtId;
 
     @Column(name = "mvt_fecha", insertable = false, updatable = false)
@@ -36,6 +33,7 @@ public class Movimiento  implements Serializable {
     private String mvtTipo;
 
     @Column(name = "mvt_valor", nullable = false)
+    @NotNull(message = "El valor es obligatorio")
     private Long mvtValor;
 
     @Column(name = "mvt_saldo", nullable = false)
@@ -44,7 +42,6 @@ public class Movimiento  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "mvt_cuenta")
     @JsonManagedReference
-    @NotNull(message = "La cuenta es obligatoria")
     private Cuenta mvtCuenta;
 
 }
