@@ -6,7 +6,7 @@ services:
     env_file: .env
     build:
       context: .
-    command: java -jar api-0.0.1-SNAPSHOT.jar ${ENV_PROFILE_PROPERTIES}
+    command: java -jar app.jar ${ENV_PROFILE_PROPERTIES}
     ports:
       - 8083:8083
     depends_on:

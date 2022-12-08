@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
@@ -62,14 +64,14 @@ class ApiApplicationTests {
 		CuentaDto cuentaDto = CuentaDto.builder()
 				.idClient(1L).cntEstado(true)
 				.cntTipo(Enum.EnumTipoCuenta.AHORROS)
-				.cntSaldoInicial(2000L)
+				.cntSaldoInicial(BigDecimal.valueOf(2000))
 				.cntNumero(11111L).build();
 
 		mvc.perform(MockMvcRequestBuilders
 						.post(CuentaController.URL_CONTROLLER )
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(mapToJson(cuentaDto)))
-				.andExpect(MockMvcResultMatchers.status().isConflict());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	protected String mapToJson(Object obj) throws JsonProcessingException {
