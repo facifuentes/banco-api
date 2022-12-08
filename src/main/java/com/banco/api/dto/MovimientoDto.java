@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,12 +22,12 @@ public class MovimientoDto {
     private Enum.EnumTipoMovimiento mvtTipo;
 
     @NotNull(message = "Valor obligatorio")
-    private Long mvtValor;
+    private BigDecimal mvtValor;
 
     @NotNull(message = "Numero de la cuenta es obligatorio")
     private Long cuentaNumero;
 
     private String mvtFecha;
 
-    private Long mvtSaldo;
+    private BigDecimal mvtSaldo;
 }

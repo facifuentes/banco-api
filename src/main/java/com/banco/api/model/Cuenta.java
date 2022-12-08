@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Builder
@@ -33,7 +34,7 @@ public class Cuenta  implements Serializable {
     private String cntTipo;
 
     @Column(name = "cnt_saldo_inicial", nullable = false)
-    private Long cntSaldoInicial;
+    private BigDecimal cntSaldoInicial;
 
     @Column(name = "cnt_estado", nullable = false)
     private Boolean cntEstado;

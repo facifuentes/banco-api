@@ -10,16 +10,14 @@ import com.banco.api.repository.CuentaRepository;
 import com.banco.api.repository.MovimientoRepository;
 import com.banco.api.service.impl.MovimientoService;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,10 +46,10 @@ class IMovimientoServiceTests {
 	@BeforeEach
 	@DisplayName("injectDependency")
 	void injectionTest() {
-		cuenta = Cuenta.builder().cntId(1L).cntSaldoInicial(2000L).cntNumero(123456L).build();
+		cuenta = Cuenta.builder().cntId(1L).cntSaldoInicial(BigDecimal.valueOf(2000)).cntNumero(123456L).build();
 		movimiento = Movimiento.builder()
 				.mvtCuenta(cuenta)
-				.mvtValor(1000L)
+				.mvtValor(BigDecimal.valueOf(1000))
 				.mvtTipo(Enum.EnumTipoMovimiento.RETIRO.toString()).build();
 		movimientoService = new MovimientoService(movimientoRepository,cuentaRepository);
 	}
@@ -85,7 +83,7 @@ class IMovimientoServiceTests {
 	void saveRetiro(){
 		when(cuentaRepository.findCuentaByCntNumero(anyLong())).thenReturn(Optional.ofNullable(cuenta));
 		when(movimientoRepository.save(movimiento)).thenReturn(movimiento);
-		assertEquals(-1000L, movimientoService.save(movimiento).getMvtValor());
+		assertEquals(new BigDecimal(-1000), movimientoService.save(movimiento).getMvtValor());
 	}
 
 	@Test
@@ -96,7 +94,7 @@ class IMovimientoServiceTests {
 		movimiento.setMvtTipo(Enum.EnumTipoMovimiento.DEPOSITO.toString());
 		when(cuentaRepository.findCuentaByCntNumero(anyLong())).thenReturn(Optional.ofNullable(cuenta));
 		when(movimientoRepository.save(movimiento)).thenReturn(movimiento);
-		assertEquals(3000L, movimientoService.save(movimiento).getMvtSaldo());
+		assertEquals(new BigDecimal(3000), movimientoService.save(movimiento).getMvtSaldo());
 	}
 
 
@@ -105,7 +103,7 @@ class IMovimientoServiceTests {
 	@Order(5)
 	@Transactional(propagation = Propagation.REQUIRED)
 	void saveRetiroSaldoCero(){
-		cuenta.setCntSaldoInicial(0L);
+		cuenta.setCntSaldoInicial(BigDecimal.ZERO);
 		when(cuentaRepository.findCuentaByCntNumero(anyLong())).thenReturn(Optional.ofNullable(cuenta));
 		when(movimientoRepository.save(movimiento)).thenReturn(movimiento);
 		org.assertj.core.api.Assertions.assertThatExceptionOfType(ForbiddenException.class).isThrownBy(() ->movimientoService.save(movimiento));
@@ -116,7 +114,7 @@ class IMovimientoServiceTests {
 	@Order(6)
 	@Transactional(propagation = Propagation.REQUIRED)
 	void saveRetiroMayorAlSaldo(){
-		movimiento.setMvtValor(50000L);
+		movimiento.setMvtValor(BigDecimal.valueOf(50000));
 		when(cuentaRepository.findCuentaByCntNumero(anyLong())).thenReturn(Optional.ofNullable(cuenta));
 		when(movimientoRepository.save(movimiento)).thenReturn(movimiento);
 		org.assertj.core.api.Assertions.assertThatExceptionOfType(ForbiddenException.class).isThrownBy(() ->movimientoService.save(movimiento));

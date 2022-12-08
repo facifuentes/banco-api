@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,10 +35,10 @@ public class Movimiento  implements Serializable {
 
     @Column(name = "mvt_valor", nullable = false)
     @NotNull(message = "El valor es obligatorio")
-    private Long mvtValor;
+    private BigDecimal mvtValor;
 
     @Column(name = "mvt_saldo", nullable = false)
-    private Long mvtSaldo;
+    private BigDecimal mvtSaldo;
 
     @ManyToOne
     @JoinColumn(name = "mvt_cuenta")

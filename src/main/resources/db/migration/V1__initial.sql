@@ -18,7 +18,7 @@ CREATE TABLE sc_banco.cuenta (
       cnt_id SERIAL NOT NULL,
       cnt_numero int NOT NULL,
       cnt_tipo varchar(50) NOT NULL,
-      cnt_saldo_inicial int NOT NULL,
+      cnt_saldo_inicial DOUBLE PRECISION NOT NULL,
       cnt_estado boolean NOT NULL,
       cnt_cliente int NOT NULL,
       PRIMARY KEY (cnt_id)
@@ -31,8 +31,8 @@ CREATE TABLE sc_banco.movimiento (
      mvt_id SERIAL NOT NULL,
      mvt_fecha timestamp without time zone default now() NOT NULL,
      mvt_tipo varchar(50) NOT NULL,
-     mvt_valor int NOT NULL,
-     mvt_saldo int NOT NULL,
+     mvt_valor DOUBLE PRECISION  NOT NULL,
+     mvt_saldo DOUBLE PRECISION  NOT NULL,
      mvt_cuenta int NOT NULL,
      PRIMARY KEY (mvt_id)
 );

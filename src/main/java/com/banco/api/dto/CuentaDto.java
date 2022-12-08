@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class CuentaDto {
     private Enum.EnumTipoCuenta cntTipo;
 
     @NotNull(message = "El saldo inicial es obligatorio")
-    private Long cntSaldoInicial;
+    private BigDecimal cntSaldoInicial;
 
     @NotNull(message = "El estado es obligatorio")
     private Boolean cntEstado;

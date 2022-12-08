@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +34,12 @@ public class MovimientoService implements IMovimientoService {
         long numeroCuenta=movimiento.getMvtCuenta().getCntNumero();
 
         Cuenta cuenta = cuentaRepository.findCuentaByCntNumero(numeroCuenta).orElseThrow(()->new NotFoundException("Cuenta no encontrada"));
-        long saldo = getSaldoCuenta(numeroCuenta, cuenta.getCntSaldoInicial());
+        BigDecimal saldo = getSaldoCuenta(numeroCuenta, cuenta.getCntSaldoInicial());
 
-        long valorMovimiento =getValorMovimiento(movimiento.getMvtTipo(), movimiento.getMvtValor());
-        saldo +=valorMovimiento;
+        BigDecimal valorMovimiento =getValorMovimiento(movimiento.getMvtTipo(), movimiento.getMvtValor());
+        saldo= saldo.add(valorMovimiento);
 
-        if(saldo<=0){
+        if(saldo.compareTo(BigDecimal.ZERO)<0){
             throw new ForbiddenException("Saldo no disponible");
         }
 
@@ -50,14 +51,14 @@ public class MovimientoService implements IMovimientoService {
         return movimientoRepository.save(movimiento);
     }
 
-    private long getValorMovimiento(String tipoMovimiento, long valor){
+    private BigDecimal getValorMovimiento(String tipoMovimiento, BigDecimal valor){
         if(tipoMovimiento.equals(Enum.EnumTipoMovimiento.RETIRO.toString())){
-            valor *= -1;
+            valor= valor.negate();
         }
         return valor;
     }
 
-    private long getSaldoCuenta(long numeroCuenta, long saldoActual){
+    private BigDecimal getSaldoCuenta(long numeroCuenta, BigDecimal saldoActual){
 
         Optional<Movimiento> ultimoMovimiento=movimientoRepository.findFirstByMvtCuenta_CntNumeroOrderByMvtFechaDesc(numeroCuenta);
 
